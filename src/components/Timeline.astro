@@ -1,0 +1,30 @@
+---
+const milestones = [
+  { year: "2023", title: "Fundación", description: "Se constituye INTERAUTO SAVV con el objetivo de desarrollar la importación y comercialización de vehículos de marcas internacionales en Bolivia." },
+  { year: "2024", title: "Desarrollo Comercial", description: "Fortalecimiento de la estructura comercial y relaciones con fabricantes internacionales, incorporando vehículos con tecnología avanzada." },
+  { year: "2025", title: "Posicionamiento", description: "Participación activa en ferias y eventos automotrices nacionales, consolidando presencia y ampliando el portafolio de productos." },
+  { year: "2026", title: "Expansión", description: "Impulso del crecimiento mediante expansión comercial, fortalecimiento de alianzas e introducción de nuevas soluciones de movilidad.", current: true },
+];
+---
+
+<section id="historia" class="py-24 sm:py-32 bg-dark">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="text-center mb-20 animate-on-scroll">
+      <h2 class="font-heading font-[800] text-3xl sm:text-4xl text-white">Nuestra Historia</h2>
+      <div class="w-12 h-[2px] bg-red-primary mx-auto mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-white/10">
+      {milestones.map((item, index) => (
+        <div class={`animate-on-scroll delay-${index + 1} bg-dark p-8 sm:p-10 group hover:bg-white/[0.03] transition-colors duration-500`}>
+          <span class={`font-heading font-[800] text-sm tracking-wider ${item.current ? 'text-red-primary' : 'text-white/30'}`}>
+            {item.year}
+          </span>
+          <h3 class="font-heading font-[700] text-xl text-white mt-3 mb-4">{item.title}</h3>
+          <p class="text-white/50 text-sm leading-relaxed">{item.description}</p>
+          {item.current && <div class="w-8 h-[2px] bg-red-primary mt-6"></div>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

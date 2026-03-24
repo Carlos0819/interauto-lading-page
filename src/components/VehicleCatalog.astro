@@ -1,0 +1,109 @@
+---
+import { vehicles, categories, brands } from "../data/vehicles";
+import VehicleCard from "./VehicleCard.astro";
+---
+
+<section id="catalogo" class="py-24 sm:py-32 bg-[#fafafa] border-t border-dark/5">
+  <div class="max-w-[1400px] mx-auto px-6">
+    <div class="text-center mb-14 animate-on-scroll">
+      <h2 class="font-heading font-[800] text-3xl sm:text-4xl text-dark">Modelos</h2>
+      <div class="w-12 h-[2px] bg-red-primary mx-auto mt-4 mb-4"></div>
+      <p class="text-dark/50 text-base max-w-lg mx-auto">
+        SUVs, pickups, eléctricos y utilitarios de marcas internacionales.
+      </p>
+    </div>
+
+    <!-- Filters -->
+    <div class="animate-on-scroll mb-12 flex flex-col items-center gap-4">
+      <div class="flex flex-wrap justify-center gap-2">
+        {categories.map((cat) => (
+          <button
+            class={`filter-btn category-filter px-5 py-2 text-[13px] font-medium tracking-wide transition-all duration-200 cursor-pointer border ${
+              cat === "Todos"
+                ? "bg-dark text-white border-dark"
+                : "bg-transparent text-dark/60 border-dark/15 hover:border-dark hover:text-dark"
+            }`}
+            data-filter={cat}
+            data-type="category"
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+      <div class="flex flex-wrap justify-center gap-2">
+        {brands.map((brand) => (
+          <button
+            class={`filter-btn brand-filter px-4 py-1.5 text-[12px] font-medium tracking-wide transition-all duration-200 cursor-pointer ${
+              brand === "Todas"
+                ? "text-dark underline underline-offset-4"
+                : "text-dark/40 hover:text-dark"
+            }`}
+            data-filter={brand}
+            data-type="brand"
+          >
+            {brand}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div id="vehicle-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {vehicles.map((vehicle, index) => (
+        <div class="vehicle-item" data-category={vehicle.category} data-brand={vehicle.brand}>
+          <VehicleCard vehicle={vehicle} index={index} />
+        </div>
+      ))}
+    </div>
+
+    <div id="no-results" class="hidden text-center py-20">
+      <p class="text-dark/40">No se encontraron vehículos con los filtros seleccionados.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  let activeCategory = "Todos";
+  let activeBrand = "Todas";
+
+  function filterVehicles() {
+    const items = document.querySelectorAll(".vehicle-item");
+    let visibleCount = 0;
+    items.forEach((item) => {
+      const el = item as HTMLElement;
+      const matchCategory = activeCategory === "Todos" || el.dataset.category === activeCategory;
+      const matchBrand = activeBrand === "Todas" || el.dataset.brand === activeBrand;
+      if (matchCategory && matchBrand) { el.style.display = ""; visibleCount++; }
+      else { el.style.display = "none"; }
+    });
+    document.getElementById("no-results")!.classList.toggle("hidden", visibleCount > 0);
+  }
+
+  function updateFilterStyles() {
+    document.querySelectorAll(".category-filter").forEach((btn) => {
+      const el = btn as HTMLElement;
+      if (el.dataset.filter === activeCategory) {
+        el.className = "filter-btn category-filter px-5 py-2 text-[13px] font-medium tracking-wide transition-all duration-200 cursor-pointer border bg-dark text-white border-dark";
+      } else {
+        el.className = "filter-btn category-filter px-5 py-2 text-[13px] font-medium tracking-wide transition-all duration-200 cursor-pointer border bg-transparent text-dark/60 border-dark/15 hover:border-dark hover:text-dark";
+      }
+    });
+    document.querySelectorAll(".brand-filter").forEach((btn) => {
+      const el = btn as HTMLElement;
+      if (el.dataset.filter === activeBrand) {
+        el.className = "filter-btn brand-filter px-4 py-1.5 text-[12px] font-medium tracking-wide transition-all duration-200 cursor-pointer text-dark underline underline-offset-4";
+      } else {
+        el.className = "filter-btn brand-filter px-4 py-1.5 text-[12px] font-medium tracking-wide transition-all duration-200 cursor-pointer text-dark/40 hover:text-dark";
+      }
+    });
+  }
+
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const el = btn as HTMLElement;
+      if (el.dataset.type === "category") activeCategory = el.dataset.filter || "Todos";
+      else activeBrand = el.dataset.filter || "Todas";
+      updateFilterStyles();
+      filterVehicles();
+    });
+  });
+</script>

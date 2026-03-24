@@ -1,0 +1,91 @@
+---
+const projections = [
+  { year: "Año 1 (2026*)", units: 249, income: "16.5", avgMonth: "~28" },
+  { year: "Año 2 (2027)", units: 496, income: "31.6", avgMonth: "~41" },
+  { year: "Año 3 (2028)", units: 538, income: "33.1", avgMonth: "~45" },
+];
+
+const mixData = [
+  { modelo: "Jetour X70", units: "218", income: "6.54M" },
+  { modelo: "Toyota Hilux", units: "203", income: "13.20M" },
+  { modelo: "Hilux AT", units: "120", income: "9.12M" },
+  { modelo: "Soueast S06", units: "95", income: "2.38M" },
+  { modelo: "Jetour T2", units: "89", income: "7.57M" },
+  { modelo: "Toyota LC70", units: "83", income: "8.72M" },
+  { modelo: "Toyota Prado", units: "71", income: "8.52M" },
+];
+---
+
+<section id="proyecciones" class="py-20 sm:py-28 bg-dark relative overflow-hidden">
+  <!-- Decorative -->
+  <div class="absolute top-20 right-0 w-96 h-96 bg-red-primary/5 rounded-full blur-3xl"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-16 animate-on-scroll">
+      <span class="inline-block px-4 py-1.5 bg-red-primary/20 border border-red-primary/30 rounded-full text-red-primary text-sm font-semibold tracking-wider uppercase mb-4">
+        Proyección 2026-2029
+      </span>
+      <h2 class="font-heading font-[900] text-3xl sm:text-4xl lg:text-5xl text-white uppercase tracking-tight">
+        Proyección de <span class="text-red-primary">Ventas</span>
+      </h2>
+      <p class="text-red-primary font-heading font-[800] text-xl sm:text-2xl mt-6">
+        1,437 unidades proyectadas | USD 89.9 millones
+      </p>
+    </div>
+
+    <!-- Projection Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      {projections.map((proj, index) => (
+        <div class={`animate-on-scroll delay-${index + 1} bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-500`}>
+          <h4 class="font-heading font-semibold text-white/60 text-sm uppercase tracking-wider mb-4">{proj.year}</h4>
+          <p class="font-heading font-[900] text-5xl text-red-primary mb-2">
+            <span class="counter" data-target={proj.units.toString()}>0</span>
+          </p>
+          <p class="text-white/50 text-sm mb-4">unidades</p>
+          <div class="bg-white/5 rounded-xl p-3">
+            <p class="text-white font-heading font-bold text-lg">USD {proj.income}M</p>
+            <p class="text-white/40 text-xs">{proj.avgMonth} uds/mes</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Mix Table -->
+    <div class="animate-on-scroll bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+      <div class="p-6 sm:p-8 pb-0">
+        <h3 class="font-heading font-[800] text-xl text-white uppercase tracking-wider">
+          Mix de Marcas Proyectado (2026-2028)
+        </h3>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full mt-6">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="text-left px-6 sm:px-8 py-4 font-heading font-bold text-white/60 text-xs uppercase tracking-wider">Modelo</th>
+              <th class="text-right px-6 sm:px-8 py-4 font-heading font-bold text-white/60 text-xs uppercase tracking-wider">Uds 3 años</th>
+              <th class="text-right px-6 sm:px-8 py-4 font-heading font-bold text-white/60 text-xs uppercase tracking-wider">Ingreso USD</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mixData.map((row) => (
+              <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td class="px-6 sm:px-8 py-4 text-white font-semibold">{row.modelo}</td>
+                <td class="px-6 sm:px-8 py-4 text-right text-white/70">{row.units}</td>
+                <td class="px-6 sm:px-8 py-4 text-right text-red-primary font-semibold">{row.income}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr class="bg-red-primary/10">
+              <td class="px-6 sm:px-8 py-4 font-heading font-[800] text-red-primary">TOTAL 3 AÑOS</td>
+              <td class="px-6 sm:px-8 py-4 text-right font-heading font-[800] text-white">1,437 uds</td>
+              <td class="px-6 sm:px-8 py-4 text-right font-heading font-[800] text-red-primary">USD 89.9M</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" fill="none">
+  <!-- INTER (red) -->
+  <text x="0" y="68" font-family="'Arial Black', 'Montserrat', sans-serif" font-weight="900" font-size="72" fill="#DA251D" letter-spacing="-1">INTER</text>
+  <!-- AUTO (black) -->
+  <text x="220" y="68" font-family="'Arial Black', 'Montserrat', sans-serif" font-weight="900" font-size="72" fill="#1a1a1a" letter-spacing="-1">AUTO</text>
+  <!-- Gray line -->
+  <polygon points="10,82 420,82 430,88 20,88" fill="#B0B0B0"/>
+  <!-- SAVV (red) -->
+  <text x="310" y="112" font-family="'Arial Black', 'Montserrat', sans-serif" font-weight="900" font-size="42" fill="#DA251D" letter-spacing="2">SAVV</text>
+</svg>

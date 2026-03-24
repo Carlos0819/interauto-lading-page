@@ -1,0 +1,27 @@
+---
+const values = [
+  { title: "Confianza", description: "Relaciones comerciales sólidas basadas en transparencia y responsabilidad." },
+  { title: "Excelencia", description: "Altos estándares de calidad en productos, servicios y procesos." },
+  { title: "Innovación", description: "Incorporación de nuevas tecnologías y tendencias globales de movilidad." },
+  { title: "Compromiso", description: "Dedicación para satisfacer las necesidades de clientes y aliados." },
+  { title: "Sostenibilidad", description: "Desarrollo empresarial responsable que genera valor económico y social." },
+];
+---
+
+<section id="valores" class="py-24 sm:py-32 bg-[#fafafa]">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="text-center mb-16 animate-on-scroll">
+      <h2 class="font-heading font-[800] text-3xl sm:text-4xl text-dark">Nuestros Valores</h2>
+      <div class="w-12 h-[2px] bg-red-primary mx-auto mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-dark/10 animate-on-scroll delay-1">
+      {values.map((value) => (
+        <div class="bg-[#fafafa] p-8 text-center hover:bg-white transition-colors duration-300">
+          <h3 class="font-heading font-[700] text-base text-dark mb-3">{value.title}</h3>
+          <p class="text-dark/50 text-sm leading-relaxed">{value.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

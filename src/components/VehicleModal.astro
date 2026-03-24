@@ -1,0 +1,110 @@
+---
+import { vehicles } from "../data/vehicles";
+---
+
+<div id="vehicle-modal" class="modal-backdrop fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <!-- Header Image -->
+    <div class="relative h-64 sm:h-80 overflow-hidden rounded-t-2xl">
+      <img id="modal-image" src="" alt="" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+      <button id="modal-close" class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors cursor-pointer">
+        <svg class="w-5 h-5 text-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="absolute bottom-6 left-6 right-6">
+        <span id="modal-category" class="inline-block px-3 py-1 bg-red-primary text-white text-xs font-bold uppercase tracking-wider mb-3"></span>
+        <h2 id="modal-title" class="font-heading font-[900] text-3xl text-white"></h2>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 sm:p-8">
+      <p id="modal-description" class="text-dark/60 text-base leading-relaxed mb-8"></p>
+
+      <!-- Specs -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-[#fafafa] rounded-lg p-4 text-center">
+          <p class="text-[11px] text-dark/40 uppercase tracking-wider">Motor</p>
+          <p id="modal-motor" class="font-heading font-bold text-sm text-dark mt-1"></p>
+        </div>
+        <div class="bg-[#fafafa] rounded-lg p-4 text-center">
+          <p class="text-[11px] text-dark/40 uppercase tracking-wider">Potencia</p>
+          <p id="modal-potencia" class="font-heading font-bold text-sm text-dark mt-1"></p>
+        </div>
+        <div class="bg-[#fafafa] rounded-lg p-4 text-center">
+          <p class="text-[11px] text-dark/40 uppercase tracking-wider">Transmisión</p>
+          <p id="modal-transmision" class="font-heading font-bold text-sm text-dark mt-1"></p>
+        </div>
+        <div class="bg-[#fafafa] rounded-lg p-4 text-center">
+          <p class="text-[11px] text-dark/40 uppercase tracking-wider">Combustible</p>
+          <p id="modal-combustible" class="font-heading font-bold text-sm text-dark mt-1"></p>
+        </div>
+        <div class="bg-[#fafafa] rounded-lg p-4 text-center">
+          <p class="text-[11px] text-dark/40 uppercase tracking-wider">Pasajeros</p>
+          <p id="modal-pasajeros" class="font-heading font-bold text-sm text-dark mt-1"></p>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <ul id="modal-features" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-8"></ul>
+
+      <!-- CTA -->
+      <a href="#contacto" id="modal-cta" class="block w-full text-center bg-dark hover:bg-dark/90 text-white py-4 font-heading font-bold uppercase text-sm tracking-wider transition-colors">
+        Solicitar Cotización
+      </a>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ vehiclesData: JSON.stringify(vehicles) }}>
+  const vehicles = JSON.parse(vehiclesData);
+  const modal = document.getElementById("vehicle-modal");
+  const closeBtn = document.getElementById("modal-close");
+
+  function openModal(vehicleId) {
+    const v = vehicles.find((v) => v.id === vehicleId);
+    if (!v) return;
+
+    document.getElementById("modal-image").src = v.image;
+    document.getElementById("modal-image").alt = `${v.brand} ${v.model}`;
+    document.getElementById("modal-category").textContent = v.category;
+    document.getElementById("modal-title").textContent = `${v.brand} ${v.model}`;
+    document.getElementById("modal-description").textContent = v.description;
+    document.getElementById("modal-motor").textContent = v.specs.motor;
+    document.getElementById("modal-potencia").textContent = v.specs.potencia;
+    document.getElementById("modal-transmision").textContent = v.specs.transmision;
+    document.getElementById("modal-combustible").textContent = v.specs.combustible;
+    document.getElementById("modal-pasajeros").textContent = v.specs.pasajeros.toString();
+
+    document.getElementById("modal-features").innerHTML = v.features
+      .map((f) =>
+        `<li class="flex items-start gap-2 text-sm text-dark/60">
+          <svg class="w-4 h-4 text-red-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          ${f}
+        </li>`
+      ).join("");
+
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  closeBtn.addEventListener("click", closeModal);
+  document.getElementById("modal-cta").addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest(".vehicle-card");
+    if (card) openModal(card.dataset.vehicleId);
+  });
+</script>

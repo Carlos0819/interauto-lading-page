@@ -1,0 +1,43 @@
+---
+const cities = [
+  { name: "LA PAZ", left: "25%", top: "37%" },
+  { name: "COCHABAMBA", left: "40%", top: "51%" },
+  { name: "SANTA CRUZ", left: "60%", top: "49%" },
+];
+---
+
+<section id="presencia" class="py-24 sm:py-32 bg-dark">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="animate-on-scroll grid grid-cols-1 lg:grid-cols-[1fr_1px_1.4fr] gap-10 lg:gap-16 items-center">
+
+      <!-- Left: Title -->
+      <div class="text-center lg:text-left">
+        <h2 class="font-heading font-[900] text-3xl sm:text-4xl text-white leading-tight">
+          Presencia en<br />
+          <span class="text-5xl sm:text-6xl">BOLIVIA</span>
+        </h2>
+        <p class="text-red-primary text-sm font-medium italic mt-3">Situado en 3 ciudades</p>
+      </div>
+
+      <!-- Divider -->
+      <div class="hidden lg:block w-px h-48 bg-white/15"></div>
+
+      <!-- Right: Map -->
+      <div class="animate-on-scroll delay-1 relative max-w-lg mx-auto lg:mx-0 w-full">
+        <img src="/mapa.png" alt="Mapa de Bolivia" class="w-full h-auto brightness-75 invert" />
+
+        {cities.map((city) => (
+          <div
+            class="absolute flex flex-col items-center"
+            style={`left: ${city.left}; top: ${city.top}; transform: translate(-50%, -100%);`}
+          >
+            <img src="/logo.png" alt="INTERAUTO SAVV" class="h-4 sm:h-6 w-auto invert brightness-200" />
+            <span class="font-heading font-[800] text-[8px] sm:text-[10px] text-white tracking-wider mt-0.5">
+              {city.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
