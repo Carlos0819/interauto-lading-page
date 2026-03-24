@@ -1,43 +1,38 @@
 ---
 const cities = [
-  { name: "LA PAZ", left: "25%", top: "37%" },
-  { name: "COCHABAMBA", left: "40%", top: "51%" },
-  { name: "SANTA CRUZ", left: "60%", top: "49%" },
+  { name: "La Paz", role: "Oficina Principal" },
+  { name: "Cochabamba", role: "Sucursal Regional" },
+  { name: "Santa Cruz", role: "Sucursal Regional" },
 ];
 ---
 
-<section id="presencia" class="py-24 sm:py-32 bg-dark">
-  <div class="max-w-[1200px] mx-auto px-6">
-    <div class="animate-on-scroll grid grid-cols-1 lg:grid-cols-[1fr_1px_1.4fr] gap-10 lg:gap-16 items-center">
+<section id="presencia" class="py-20 sm:py-28 bg-dark relative overflow-hidden">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-red-primary/5 rounded-full blur-[120px]"></div>
 
-      <!-- Left: Title -->
-      <div class="text-center lg:text-left">
-        <h2 class="font-heading font-[900] text-3xl sm:text-4xl text-white leading-tight">
-          Presencia en<br />
-          <span class="text-5xl sm:text-6xl">BOLIVIA</span>
-        </h2>
-        <p class="text-red-primary text-sm font-medium italic mt-3">Situado en 3 ciudades</p>
-      </div>
+  <div class="max-w-[900px] mx-auto px-6 relative z-10">
+    <div class="animate-on-scroll text-center mb-14">
+      <p class="text-red-primary text-xs font-bold uppercase tracking-[0.3em] mb-4">Cobertura Nacional</p>
+      <h2 class="font-heading font-[900] text-3xl sm:text-5xl text-white leading-tight">
+        Presentes en todo
+        <span class="text-red-primary">Bolivia</span>
+      </h2>
+    </div>
 
-      <!-- Divider -->
-      <div class="hidden lg:block w-px h-48 bg-white/15"></div>
+    <div class="animate-on-scroll delay-1 flex flex-col sm:flex-row items-stretch justify-center">
+      {cities.map((city, i) => (
+        <div class={`flex-1 text-center py-8 px-6 ${i < cities.length - 1 ? 'sm:border-r sm:border-white/10' : ''}`}>
+          <h3 class="font-heading font-[800] text-xl sm:text-2xl text-white mb-1">
+            {city.name}
+          </h3>
+          <p class="text-white/25 text-xs font-medium uppercase tracking-wider">{city.role}</p>
+        </div>
+      ))}
+    </div>
 
-      <!-- Right: Map -->
-      <div class="animate-on-scroll delay-1 relative max-w-lg mx-auto lg:mx-0 w-full">
-        <img src="/mapa.png" alt="Mapa de Bolivia" class="w-full h-auto brightness-75 invert" />
-
-        {cities.map((city) => (
-          <div
-            class="absolute flex flex-col items-center"
-            style={`left: ${city.left}; top: ${city.top}; transform: translate(-50%, -100%);`}
-          >
-            <img src="/logo.png" alt="INTERAUTO SAVV" class="h-4 sm:h-6 w-auto invert brightness-200" />
-            <span class="font-heading font-[800] text-[8px] sm:text-[10px] text-white tracking-wider mt-0.5">
-              {city.name}
-            </span>
-          </div>
-        ))}
-      </div>
+    <div class="animate-on-scroll delay-2 mt-12 text-center">
+      <p class="text-white/15 text-sm max-w-lg mx-auto leading-relaxed">
+        Consolidando presencia en el mercado boliviano, generando valor para clientes, aliados estratégicos e instituciones financieras.
+      </p>
     </div>
   </div>
 </section>

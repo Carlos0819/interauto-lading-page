@@ -68,6 +68,72 @@ h1, h2, h3, h4, h5, h6 {
   font-variant-numeric: tabular-nums;
 }
 
+/* Vehicle cards — hover lift + shadow */
+.vehicle-card {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.04);
+}
+
+/* Custom cursor for interactive cards */
+.vehicle-card {
+  cursor: pointer;
+}
+
+.vehicle-card:active {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+}
+
+/* Section wave separator */
+.section-wave {
+  position: relative;
+}
+
+.section-wave::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: inherit;
+  clip-path: ellipse(55% 100% at 50% 100%);
+  z-index: 2;
+}
+
+/* Diagonal separator */
+.section-diagonal-down {
+  position: relative;
+}
+
+.section-diagonal-down::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 2;
+}
+
+/* Focus states for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-red-primary);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(218, 37, 29, 0.15);
+  color: inherit;
+}
+
 /* Vehicle modal */
 .modal-backdrop {
   opacity: 0;
@@ -86,4 +152,55 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(40px) scale(0.95);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+/* Loader */
+.loader-logo {
+  animation: loader-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loader-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.loader-progress {
+  animation: loader-fill 1.2s ease-out forwards;
+}
+
+@keyframes loader-fill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* WhatsApp float entrance */
+.whatsapp-float {
+  animation: whatsapp-enter 0.5s ease-out 2s both;
+}
+
+@keyframes whatsapp-enter {
+  0% { transform: scale(0) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Active nav link */
+.nav-link-active {
+  color: var(--color-red-primary) !important;
+}
+
+/* Staggered card animations */
+.vehicle-item:nth-child(1) .animate-on-scroll { transition-delay: 0s; }
+.vehicle-item:nth-child(2) .animate-on-scroll { transition-delay: 0.1s; }
+.vehicle-item:nth-child(3) .animate-on-scroll { transition-delay: 0.2s; }
+.vehicle-item:nth-child(4) .animate-on-scroll { transition-delay: 0.15s; }
+.vehicle-item:nth-child(5) .animate-on-scroll { transition-delay: 0.25s; }
+.vehicle-item:nth-child(6) .animate-on-scroll { transition-delay: 0.35s; }
+.vehicle-item:nth-child(7) .animate-on-scroll { transition-delay: 0.1s; }
+.vehicle-item:nth-child(8) .animate-on-scroll { transition-delay: 0.2s; }
+.vehicle-item:nth-child(9) .animate-on-scroll { transition-delay: 0.3s; }
+.vehicle-item:nth-child(10) .animate-on-scroll { transition-delay: 0.15s; }
+
+/* Smooth image reveal */
+.vehicle-img {
+  transition: filter 0.6s ease, transform 0.7s ease;
 }

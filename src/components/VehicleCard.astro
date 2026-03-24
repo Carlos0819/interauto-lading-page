@@ -9,26 +9,37 @@ const delayClass = `delay-${Math.min(index % 3 + 1, 5)}`;
   class={`animate-on-scroll ${delayClass} vehicle-card group cursor-pointer`}
   data-vehicle-id={vehicle.id}
 >
-  <div class="relative aspect-[4/3] overflow-hidden bg-[#f0f0f0]">
+  <div class="relative aspect-[4/3] overflow-hidden bg-[#e8e8e8]">
+    <!-- Blur-up image -->
     <img
       src={vehicle.image}
       alt={`${vehicle.brand} ${vehicle.model}`}
-      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      class="vehicle-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 blur-sm scale-105"
       loading="lazy"
+      onload="this.classList.remove('blur-sm','scale-105')"
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <span class="inline-block bg-white text-dark text-xs font-medium px-4 py-2">Solicitar cotización</span>
-    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+    <!-- Category badge -->
+    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-dark text-[10px] font-bold uppercase tracking-wider px-3 py-1">
+      {vehicle.category}
+    </span>
+
+    <!-- CTA on hover — opens quote modal with this vehicle -->
+    <button data-quote={vehicle.id} class="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 cursor-pointer text-left">
+      <span class="inline-flex items-center gap-2 bg-red-primary text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5">
+        Solicitar cotización
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </span>
+    </button>
   </div>
 
   <div class="py-4">
-    <div class="flex items-baseline justify-between mb-1">
-      <h3 class="font-heading font-[700] text-base text-dark">
-        {vehicle.brand} {vehicle.model}
-      </h3>
-      <span class="text-dark/30 text-xs">{vehicle.category}</span>
-    </div>
-    <p class="text-dark/40 text-sm">{vehicle.specs.motor} · {vehicle.specs.potencia} · {vehicle.specs.pasajeros} pas.</p>
+    <h3 class="font-heading font-[700] text-base text-dark group-hover:text-red-primary transition-colors duration-300">
+      {vehicle.brand} {vehicle.model}
+    </h3>
+    <p class="text-dark/40 text-sm mt-1">{vehicle.specs.motor} · {vehicle.specs.potencia} · {vehicle.specs.pasajeros} pas.</p>
   </div>
 </div>

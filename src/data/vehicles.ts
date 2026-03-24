@@ -213,7 +213,7 @@ export const vehicles: Vehicle[] = [
     brand: "Maxus",
     model: "T90 EV",
     category: "Pickup",
-    image: "/modelos/maxus-t90-ev.webp",
+    image: "/modelos/maxus-t90-ev.jpg",
     specs: {
       motor: "Motor Eléctrico Dual",
       potencia: "272 HP",

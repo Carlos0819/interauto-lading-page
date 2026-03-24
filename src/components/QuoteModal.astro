@@ -1,0 +1,187 @@
+---
+import { vehicles } from "../data/vehicles";
+const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model}` }));
+---
+
+<div id="quote-modal" class="modal-backdrop fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Solicitar cotización">
+  <div class="modal-content bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl" style="-ms-overflow-style:none;scrollbar-width:none;">
+
+    <!-- Header -->
+    <div class="relative bg-dark px-6 sm:px-8 py-8 rounded-t-2xl">
+      <button id="quote-close" class="absolute top-4 right-4 w-9 h-9 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-primary" aria-label="Cerrar">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <p class="text-red-primary text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Cotización</p>
+      <h2 class="font-heading font-[800] text-xl sm:text-2xl text-white">Solicitar Cotización</h2>
+      <p class="text-white/40 text-sm mt-2">Completa tus datos y te contactaremos a la brevedad.</p>
+    </div>
+
+    <!-- Form -->
+    <form id="quote-form" class="px-6 sm:px-8 py-6 space-y-4">
+      <div>
+        <label for="q-name" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Nombre completo *</label>
+        <input type="text" id="q-name" name="name" required
+          class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark placeholder:text-dark/25 focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors"
+          placeholder="Tu nombre"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="q-phone" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Teléfono *</label>
+          <input type="tel" id="q-phone" name="phone" required
+            class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark placeholder:text-dark/25 focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors"
+            placeholder="+591 7000 0000"
+          />
+        </div>
+        <div>
+          <label for="q-email" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Email</label>
+          <input type="email" id="q-email" name="email"
+            class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark placeholder:text-dark/25 focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors"
+            placeholder="tu@email.com"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="q-model" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Modelo de interés</label>
+        <select id="q-model" name="model"
+          class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark bg-white focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors appearance-none"
+          style="background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22%3E%3Cpath d=%22M6 9l6 6 6-6%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px;"
+        >
+          <option value="">Seleccionar modelo...</option>
+          {modelOptions.map(m => (
+            <option value={m.id}>{m.label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label for="q-message" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Mensaje (opcional)</label>
+        <textarea id="q-message" name="message" rows="3"
+          class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark placeholder:text-dark/25 focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors resize-none"
+          placeholder="¿Alguna consulta adicional?"
+        ></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" id="quote-submit"
+        class="w-full bg-red-primary hover:bg-red-dark text-white py-3.5 font-heading font-bold uppercase text-sm tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-red-primary focus:ring-offset-2 rounded-lg cursor-pointer"
+      >
+        Enviar Solicitud
+      </button>
+    </form>
+
+    <!-- Success message (hidden by default) -->
+    <div id="quote-success" class="hidden px-6 sm:px-8 py-12 text-center">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="font-heading font-[800] text-xl text-dark mb-2">¡Solicitud enviada!</h3>
+      <p class="text-dark/50 text-sm">Nos contactaremos contigo a la brevedad.</p>
+    </div>
+
+    <!-- Divider + WhatsApp -->
+    <div class="px-6 sm:px-8 pb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex-1 h-px bg-dark/8"></div>
+        <span class="text-dark/25 text-[11px] uppercase tracking-wider">o escríbenos</span>
+        <div class="flex-1 h-px bg-dark/8"></div>
+      </div>
+
+      <a id="quote-whatsapp"
+        href="https://wa.me/59170000000"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#1fba59] text-white py-3 rounded-lg font-medium text-sm transition-colors"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        WhatsApp directo
+      </a>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ modelsData: JSON.stringify(vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model}` }))) }}>
+  const models = JSON.parse(modelsData);
+  const modal = document.getElementById("quote-modal");
+  const closeBtn = document.getElementById("quote-close");
+  const form = document.getElementById("quote-form");
+  const success = document.getElementById("quote-success");
+  const modelSelect = document.getElementById("q-model");
+  const waLink = document.getElementById("quote-whatsapp");
+
+  // Open quote modal — optionally with a pre-selected vehicle
+  window.openQuoteModal = function(vehicleId) {
+    // Reset form
+    form.reset();
+    form.classList.remove("hidden");
+    success.classList.add("hidden");
+
+    // Pre-select model if provided
+    if (vehicleId && modelSelect) {
+      modelSelect.value = vehicleId;
+    }
+
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+    document.getElementById("q-name").focus();
+  };
+
+  function closeQuote() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  // Close handlers
+  closeBtn.addEventListener("click", closeQuote);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeQuote(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("active")) closeQuote();
+  });
+
+  // Form submit
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    form.classList.add("hidden");
+    success.classList.remove("hidden");
+    // Auto-close after 3s
+    setTimeout(closeQuote, 3000);
+  });
+
+  // Update WhatsApp link with form data
+  function updateWaLink() {
+    const name = document.getElementById("q-name").value;
+    const phone = document.getElementById("q-phone").value;
+    const modelVal = modelSelect.value;
+    const modelLabel = modelVal ? models.find(m => m.id === modelVal)?.label || "" : "";
+    const msg = document.getElementById("q-message").value;
+
+    let text = "Hola, estoy interesado en obtener una cotización.";
+    if (modelLabel) text = `Hola, me interesa el ${modelLabel}.`;
+    if (name) text += ` Mi nombre es ${name}.`;
+    if (phone) text += ` Mi teléfono: ${phone}.`;
+    if (msg) text += ` ${msg}`;
+
+    waLink.href = `https://wa.me/59170000000?text=${encodeURIComponent(text)}`;
+  }
+
+  // Update WA link on any input change
+  form.addEventListener("input", updateWaLink);
+  modelSelect.addEventListener("change", updateWaLink);
+
+  // Listen for quote triggers from other components
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-quote]");
+    if (trigger) {
+      e.preventDefault();
+      window.openQuoteModal(trigger.dataset.quote || "");
+    }
+  });
+</script>

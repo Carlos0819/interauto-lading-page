@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# IDE
+.claude/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Source files (not needed in repo)
+*.pdf
+Imagen1.png
+Toyota.svg
+presentacion.pdf
+
+# Loose brand logos in root (already in public/)
+/byd.png
+/jetour.png
+/maxus.png
+/soueast.webp
+/yadea.png
+/mapa.png
