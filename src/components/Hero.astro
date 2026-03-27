@@ -1,51 +1,56 @@
-<header id="inicio" class="relative h-screen min-h-[700px] overflow-hidden">
-  <!-- Parallax background -->
-  <div
-    id="hero-bg"
-    class="absolute inset-0 bg-cover bg-center scale-110 will-change-transform"
-    style="background-image: url('/portada.png')"
-  ></div>
-  <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+<header id="inicio" class="relative overflow-hidden">
+  <!-- Full image background -->
+  <div id="hero-bg" class="w-full will-change-transform">
+    <img
+      src="/portada.jpg"
+      alt="INTERAUTO SAVV Showroom"
+      class="w-full h-auto block"
+    />
+  </div>
 
-  <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+
+  <!-- Content centered over image -->
+  <div class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
     <p class="animate-on-scroll text-red-primary text-xs font-bold uppercase tracking-[0.3em] mb-6">INTERAUTO SAVV</p>
-    <h1 class="animate-on-scroll delay-1 font-heading font-[900] text-white text-4xl sm:text-5xl lg:text-[4.5rem] leading-[1.08] max-w-3xl">
+    <h1 class="animate-on-scroll delay-1 font-heading font-[900] text-white text-3xl sm:text-5xl lg:text-[4.5rem] leading-[1.08] max-w-3xl">
       Soluciones de<br />
       <span class="text-red-primary">movilidad</span> para Bolivia
     </h1>
-    <p class="animate-on-scroll delay-2 text-white/60 text-base sm:text-lg mt-6 max-w-xl font-light leading-relaxed">
+    <p class="animate-on-scroll delay-2 text-white/60 text-sm sm:text-lg mt-4 sm:mt-6 max-w-xl font-light leading-relaxed">
       Importación y comercialización de vehículos de marcas internacionales.
     </p>
-    <div class="animate-on-scroll delay-3 flex gap-4 mt-10">
-      <a href="#catalogo" class="bg-red-primary text-white px-8 py-3 text-sm font-bold uppercase tracking-wider hover:bg-red-dark transition-colors">
+    <div class="animate-on-scroll delay-3 flex gap-4 mt-6 sm:mt-10">
+      <a href="#catalogo" class="bg-red-primary text-white px-6 sm:px-8 py-3 text-sm font-bold uppercase tracking-wider hover:bg-red-dark transition-colors">
         Explorar modelos
       </a>
-      <button data-quote="" class="border border-white/30 text-white px-8 py-3 text-sm font-medium hover:bg-white/10 transition-colors cursor-pointer">
+      <button data-quote="" class="border border-white/30 text-white px-6 sm:px-8 py-3 text-sm font-medium hover:bg-white/10 transition-colors cursor-pointer">
         Cotización
       </button>
     </div>
 
     <!-- Stats counters -->
-    <div class="animate-on-scroll delay-4 flex items-center gap-8 sm:gap-12 mt-16">
+    <div class="animate-on-scroll delay-4 flex items-center gap-6 sm:gap-12 mt-8 sm:mt-16">
       <div class="text-center">
-        <span class="counter font-heading font-[900] text-2xl sm:text-3xl text-white" data-target="6" data-suffix="+">0</span>
-        <p class="text-white/30 text-[10px] sm:text-xs uppercase tracking-wider mt-1">Marcas</p>
+        <span class="counter font-heading font-[900] text-xl sm:text-3xl text-white" data-target="6" data-suffix="+">0</span>
+        <p class="text-white/30 text-[9px] sm:text-xs uppercase tracking-wider mt-1">Marcas</p>
       </div>
-      <div class="w-px h-10 bg-white/15"></div>
+      <div class="w-px h-8 sm:h-10 bg-white/15"></div>
       <div class="text-center">
-        <span class="counter font-heading font-[900] text-2xl sm:text-3xl text-white" data-target="380" data-suffix="+">0</span>
-        <p class="text-white/30 text-[10px] sm:text-xs uppercase tracking-wider mt-1">Vehículos</p>
+        <span class="counter font-heading font-[900] text-xl sm:text-3xl text-white" data-target="380" data-suffix="+">0</span>
+        <p class="text-white/30 text-[9px] sm:text-xs uppercase tracking-wider mt-1">Vehículos</p>
       </div>
-      <div class="w-px h-10 bg-white/15"></div>
+      <div class="w-px h-8 sm:h-10 bg-white/15"></div>
       <div class="text-center">
-        <span class="counter font-heading font-[900] text-2xl sm:text-3xl text-white" data-target="3">0</span>
-        <p class="text-white/30 text-[10px] sm:text-xs uppercase tracking-wider mt-1">Ciudades</p>
+        <span class="counter font-heading font-[900] text-xl sm:text-3xl text-white" data-target="3">0</span>
+        <p class="text-white/30 text-[9px] sm:text-xs uppercase tracking-wider mt-1">Ciudades</p>
       </div>
     </div>
   </div>
 
-  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-    <div class="scroll-line w-[1px] h-12 bg-white/30 mx-auto mb-2"></div>
+  <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-10">
+    <div class="scroll-line w-[1px] h-10 sm:h-12 bg-white/30 mx-auto mb-2"></div>
     <span class="text-white/30 text-[10px] uppercase tracking-[0.2em]">Scroll</span>
   </div>
 </header>
@@ -57,8 +62,8 @@
     if (!ticking) {
       requestAnimationFrame(() => {
         const scrollY = window.scrollY;
-        if (scrollY < window.innerHeight && heroBg) {
-          heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.3}px)`;
+        if (heroBg && scrollY < heroBg.offsetHeight) {
+          heroBg.style.transform = `translateY(${scrollY * 0.25}px)`;
         }
         ticking = false;
       });

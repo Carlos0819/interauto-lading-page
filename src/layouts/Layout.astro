@@ -9,7 +9,7 @@ const {
   description = "Importación, distribución y comercialización de vehículos de marcas internacionales para Bolivia. Toyota, Jetour, BYD, Maxus, Soueast, Yadea."
 } = Astro.props;
 
-const ogImage = "/portada.png";
+const ogImage = "/portada.jpg";
 ---
 
 <!doctype html>
@@ -27,7 +27,7 @@ const ogImage = "/portada.png";
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Preload hero image -->
-    <link rel="preload" as="image" href="/portada.png" />
+    <link rel="preload" as="image" href="/portada.jpg" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -112,7 +112,7 @@ const ogImage = "/portada.png";
 
       // Smart loader — waits for hero image
       const heroImg = new Image();
-      heroImg.src = "/portada.png";
+      heroImg.src = "/portada.jpg";
 
       function dismissLoader() {
         const loader = document.getElementById("loader");
