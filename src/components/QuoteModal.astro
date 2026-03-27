@@ -1,6 +1,9 @@
 ---
 import { vehicles } from "../data/vehicles";
 const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model}` }));
+
+const SUPABASE_URL = "https://zzelbikylbbxclnskgkf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6ZWxiaWt5bGJieGNsbnNrZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5MjA4NDMsImV4cCI6MjA4MTQ5Njg0M30.VGqblbw-vjQWUTpz8Xdhk5MNLyNniXvAO9moMWVAd8s";
 ---
 
 <div id="quote-modal" class="modal-backdrop fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Solicitar cotización">
@@ -46,14 +49,14 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
       </div>
 
       <div>
-        <label for="q-model" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Modelo de interés</label>
-        <select id="q-model" name="model"
+        <label for="q-model" class="block text-[11px] text-dark/50 uppercase tracking-wider font-medium mb-1.5">Modelo de interés *</label>
+        <select id="q-model" name="model" required
           class="w-full border border-dark/10 rounded-lg px-4 py-3 text-sm text-dark bg-white focus:outline-none focus:border-red-primary focus:ring-1 focus:ring-red-primary transition-colors appearance-none"
           style="background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22%3E%3Cpath d=%22M6 9l6 6 6-6%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px;"
         >
           <option value="">Seleccionar modelo...</option>
           {modelOptions.map(m => (
-            <option value={m.id}>{m.label}</option>
+            <option value={m.label}>{m.label}</option>
           ))}
         </select>
       </div>
@@ -66,11 +69,18 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
         ></textarea>
       </div>
 
+      <!-- Error message -->
+      <div id="quote-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg"></div>
+
       <!-- Submit -->
       <button type="submit" id="quote-submit"
-        class="w-full bg-red-primary hover:bg-red-dark text-white py-3.5 font-heading font-bold uppercase text-sm tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-red-primary focus:ring-offset-2 rounded-lg cursor-pointer"
+        class="w-full bg-red-primary hover:bg-red-dark text-white py-3.5 font-heading font-bold uppercase text-sm tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-red-primary focus:ring-offset-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
       >
-        Enviar Solicitud
+        <span id="submit-text">Enviar Solicitud</span>
+        <svg id="submit-spinner" class="hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
       </button>
     </form>
 
@@ -82,7 +92,8 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
         </svg>
       </div>
       <h3 class="font-heading font-[800] text-xl text-dark mb-2">¡Solicitud enviada!</h3>
-      <p class="text-dark/50 text-sm">Nos contactaremos contigo a la brevedad.</p>
+      <p class="text-dark/50 text-sm mb-1">Nos contactaremos contigo a la brevedad.</p>
+      <p class="text-dark/30 text-xs">Tu solicitud fue registrada exitosamente.</p>
     </div>
 
     <!-- Divider + WhatsApp -->
@@ -108,7 +119,11 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
   </div>
 </div>
 
-<script define:vars={{ modelsData: JSON.stringify(vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model}` }))) }}>
+<script define:vars={{
+  modelsData: JSON.stringify(vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model}` }))),
+  supabaseUrl: SUPABASE_URL,
+  supabaseKey: SUPABASE_ANON_KEY
+}}>
   const models = JSON.parse(modelsData);
   const modal = document.getElementById("quote-modal");
   const closeBtn = document.getElementById("quote-close");
@@ -116,17 +131,25 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
   const success = document.getElementById("quote-success");
   const modelSelect = document.getElementById("q-model");
   const waLink = document.getElementById("quote-whatsapp");
+  const errorDiv = document.getElementById("quote-error");
+  const submitBtn = document.getElementById("quote-submit");
+  const submitText = document.getElementById("submit-text");
+  const submitSpinner = document.getElementById("submit-spinner");
 
-  // Open quote modal — optionally with a pre-selected vehicle
+  // Open quote modal
   window.openQuoteModal = function(vehicleId) {
-    // Reset form
     form.reset();
     form.classList.remove("hidden");
     success.classList.add("hidden");
+    errorDiv.classList.add("hidden");
+    submitBtn.disabled = false;
+    submitText.textContent = "Enviar Solicitud";
+    submitSpinner.classList.add("hidden");
 
-    // Pre-select model if provided
     if (vehicleId && modelSelect) {
-      modelSelect.value = vehicleId;
+      // Match by id to find the label
+      const match = models.find(m => m.id === vehicleId);
+      if (match) modelSelect.value = match.label;
     }
 
     modal.classList.add("active");
@@ -139,20 +162,66 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
     document.body.style.overflow = "";
   }
 
-  // Close handlers
   closeBtn.addEventListener("click", closeQuote);
   modal.addEventListener("click", (e) => { if (e.target === modal) closeQuote(); });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.classList.contains("active")) closeQuote();
   });
 
-  // Form submit
-  form.addEventListener("submit", (e) => {
+  // Submit → Supabase
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    form.classList.add("hidden");
-    success.classList.remove("hidden");
-    // Auto-close after 3s
-    setTimeout(closeQuote, 3000);
+    errorDiv.classList.add("hidden");
+
+    const nombre = document.getElementById("q-name").value.trim();
+    const telefono = document.getElementById("q-phone").value.trim();
+    const email = document.getElementById("q-email").value.trim();
+    const modelo = modelSelect.value;
+    const mensaje = document.getElementById("q-message").value.trim();
+
+    // Loading state
+    submitBtn.disabled = true;
+    submitText.textContent = "Enviando...";
+    submitSpinner.classList.remove("hidden");
+
+    try {
+      const response = await fetch(`${supabaseUrl}/rest/v1/cotizaciones`, {
+        method: "POST",
+        headers: {
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${supabaseKey}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal",
+          "Accept-Profile": "interauto-saav",
+          "Content-Profile": "interauto-saav",
+        },
+        body: JSON.stringify({
+          nombre,
+          telefono,
+          email: email || null,
+          modelo,
+          mensaje: mensaje || null,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Error al enviar la solicitud");
+      }
+
+      // Success
+      form.classList.add("hidden");
+      success.classList.remove("hidden");
+      setTimeout(closeQuote, 3500);
+
+    } catch (err) {
+      console.error("Supabase error:", err);
+      errorDiv.textContent = "No se pudo enviar la solicitud. Intenta de nuevo o contáctanos por WhatsApp.";
+      errorDiv.classList.remove("hidden");
+      submitBtn.disabled = false;
+      submitText.textContent = "Enviar Solicitud";
+      submitSpinner.classList.add("hidden");
+    }
   });
 
   // Update WhatsApp link with form data
@@ -160,11 +229,10 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
     const name = document.getElementById("q-name").value;
     const phone = document.getElementById("q-phone").value;
     const modelVal = modelSelect.value;
-    const modelLabel = modelVal ? models.find(m => m.id === modelVal)?.label || "" : "";
     const msg = document.getElementById("q-message").value;
 
     let text = "Hola, estoy interesado en obtener una cotización.";
-    if (modelLabel) text = `Hola, me interesa el ${modelLabel}.`;
+    if (modelVal) text = `Hola, me interesa el ${modelVal}.`;
     if (name) text += ` Mi nombre es ${name}.`;
     if (phone) text += ` Mi teléfono: ${phone}.`;
     if (msg) text += ` ${msg}`;
@@ -172,11 +240,10 @@ const modelOptions = vehicles.map(v => ({ id: v.id, label: `${v.brand} ${v.model
     waLink.href = `https://wa.me/59176190044?text=${encodeURIComponent(text)}`;
   }
 
-  // Update WA link on any input change
   form.addEventListener("input", updateWaLink);
   modelSelect.addEventListener("change", updateWaLink);
 
-  // Listen for quote triggers from other components
+  // Listen for quote triggers
   document.addEventListener("click", (e) => {
     const trigger = e.target.closest("[data-quote]");
     if (trigger) {
